@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "faf1451e-86fc-471e-80b7-a38ef93b9d77",
+		"name": "mycollection 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27062010"
+	},
+	"item": [
+		{
+			"name": "post_reference",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//validate status code\r",
+							"pm.test(\"status code is 201\",function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//declare request data\r",
+							"//fetch data from requestbody\r",
+							"\r",
+							"var requestbody=pm.request.body.raw;\r",
+							"requestbody=JSON.parse(requestbody);\r",
+							"\r",
+							"var req_name=requestbody.name;\r",
+							"var req_job=requestbody.job;\r",
+							"\r",
+							"//validate response body\r",
+							"//generate date in required format\r",
+							"\r",
+							"var actualdate=new Date().toJSON().slice(0,13);\r",
+							"\r",
+							"//extract responsebody\r",
+							"\r",
+							"var responsebody = pm.response.json();\r",
+							"\r",
+							"//extract response body parameter\r",
+							"var res_name=responsebody.name;\r",
+							"var res_job= responsebody.job;\r",
+							"var res_id=responsebody.id;\r",
+							"var res_createdAt= responsebody.createdAt;\r",
+							"res_createdAt=res_createdAt.slice(0,13);\r",
+							"\r",
+							"//validate response body\r",
+							"pm.test(\"validate response body\",function(){\r",
+							"    pm.expect(res_name).to.eql(req_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"validate response body\",function(){\r",
+							"    pm.expect(res_job).to.eql(req_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"validate response body\",function(){\r",
+							"    pm.expect(res_id).to.not.null;\r",
+							"    pm.expect(res_id).to.not.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"validate response body\",function() {\r",
+							"    pm.expect(res_createdAt).to.eql(actualdate);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name=pm.variables.replaceIn('{{$randomFirstName}}')\r",
+							"pm.collectionVariables.set(\"Coll_Name\",name);\r",
+							"\r",
+							"var job=pm.variables.replaceIn('{{$randomJobTitle}}')\r",
+							"pm.collectionVariables.set(\"coll_job\",job);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{Coll_Name}}\",\r\n    \"job\": \"{{coll_job}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Coll_Name",
+			"value": ""
+		},
+		{
+			"key": "coll_job",
+			"value": ""
+		}
+	]
+}
